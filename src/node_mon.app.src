@@ -1,0 +1,11 @@
+{application, node_mon,
+ [
+  {description, "Node monitoring services"},
+  {vsn, "1.0.0"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {env, []}
+ ]}.
