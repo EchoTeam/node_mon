@@ -75,12 +75,8 @@ change_status(NewStatus, #state{node = Node, parent = Pid, status = OldStatus} =
         down -> start_timer_if_not_running(State)
     end,
     case NewStatus == OldStatus of
-        true  ->
-            io:format("~n[node_mon] Node ~p is still ~p~n~n", [Node, NewStatus]),
-            ignore;
-        false ->
-            io:format("~n[node_mon] Node ~p goes ~p~n~n", [Node, NewStatus]),
-            Pid ! {?MODULE, Node, NewStatus}
+        true  -> ignore;
+        false -> Pid ! {?MODULE, Node, NewStatus}
     end,
     NewState#state{status = NewStatus}.
 

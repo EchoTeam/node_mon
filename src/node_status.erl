@@ -98,14 +98,8 @@ handle_cast({trigger, _}, #state{unmet_expectations = []} = State) ->
 handle_cast({trigger, Event}, #state{unmet_expectations = Exp} = State) ->
     NewState = case Exp -- [Event] of
         Exp -> State; % No change
-        [] ->
-            io:format("~nNode ~p up, got ~p, no more expectations~n~n",
-                [node(), Event]),
-            State#state{status = up, unmet_expectations = []};
-        NewExp ->
-            io:format("~nNode ~p ~p, got ~p, still expecting ~p~n~n",
-                [node(), State#state.status, Event, NewExp]),
-            State#state{unmet_expectations = NewExp}
+        [] -> State#state{status = up, unmet_expectations = []};
+        NewExp -> State#state{unmet_expectations = NewExp}
     end,
     {noreply, NewState};
 handle_cast({expect, Event}, #state{unmet_expectations = Exp} = State) ->
