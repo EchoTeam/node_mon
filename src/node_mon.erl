@@ -76,10 +76,10 @@ change_status(NewStatus, #state{node = Node, parent = Pid, status = OldStatus} =
     end,
     case NewStatus == OldStatus of
         true  ->
-            jerr:log_debug(?MODULE, "Node ~p is still ~p", [Node, NewStatus]),
+            io:format("~n[node_mon] Node ~p is still ~p~n~n", [Node, NewStatus]),
             ignore;
         false ->
-            jerr:log_debug(?MODULE, "Node ~p goes ~p", [Node, NewStatus]),
+            io:format("~n[node_mon] Node ~p goes ~p~n~n", [Node, NewStatus]),
             Pid ! {?MODULE, Node, NewStatus}
     end,
     NewState#state{status = NewStatus}.
