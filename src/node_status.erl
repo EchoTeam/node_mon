@@ -8,7 +8,6 @@
         expect/2,
         get/0,
         get/1,
-        start_link/0,
         start_link/1,
         start_link/2,
         status/0,
@@ -45,7 +44,6 @@
 %% node_status:trigger(yaws_up).
 %%   up = node_status:get().
 %%
-start_link() -> start_link(jcfg:val(node_status_expectations)).
 start_link(Expectations) ->
     start_link(Expectations, ?MODULE).
 start_link(Expectations, Name) when is_list(Expectations), is_atom(Name) ->
@@ -98,8 +96,12 @@ handle_cast({trigger, _}, #state{unmet_expectations = []} = State) ->
 handle_cast({trigger, Event}, #state{unmet_expectations = Exp} = State) ->
     NewState = case Exp -- [Event] of
         Exp -> State; % No change
-        [] -> State#state{status = up, unmet_expectations = []};
-        NewExp -> State#state{unmet_expectations = NewExp}
+        [] ->
+            io:format("~nNode ~p up, got ~p, no more expectations~n~n", [node(), Event]),
+            State#state{status = up, unmet_expectations = []};
+        NewExp ->
+            io:format("~nNode ~p initializing, got ~p, still expecting ~p~n~n", [node(), Event, NewExp]),
+            State#state{unmet_expectations = NewExp}
     end,
     {noreply, NewState};
 handle_cast({expect, Event}, #state{unmet_expectations = Exp} = State) ->
