@@ -14,6 +14,9 @@
     code_change/3
 ]).
 
+-define(INITIAL_LOCAL_TIMEOUT, 10000).
+-define(RETRY_TIMEOUT, 60000).
+
 start_link(Node, ParentPid) ->
     start_link(Node, ParentPid, []).
 
@@ -26,7 +29,7 @@ status(ServerRef) -> gen_server:call(ServerRef, status).
 
 init([Node, ParentPid, Options]) ->
     {ok, #state{ node = Node, parent = ParentPid,
-        timer = erlang:send_after(10000, self(), timed_retry),
+        timer = erlang:send_after(initial_timeout(Node), self(), timed_retry),
         options = Options
     }}.
 
@@ -89,6 +92,8 @@ start_timer_if_not_running(#state{timer = TRef} = State)
         when is_reference(TRef) ->
     State;
 start_timer_if_not_running(#state{timer = undefined, options = Opts} = State) ->
-    Timeout = proplists:get_value(timeout, Opts, 60000),
+    Timeout = proplists:get_value(timeout, Opts, ?RETRY_TIMEOUT),
     State#state{timer=erlang:send_after(Timeout, self(), timed_retry)}.
 
+initial_timeout(Node) when Node == node() -> ?INITIAL_LOCAL_TIMEOUT;
+initial_timeout(_) -> 1000.
