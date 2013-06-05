@@ -8,6 +8,7 @@
         expect/2,
         get/0,
         get/1,
+        start_link/0,
         start_link/1,
         start_link/2,
         status/0,
@@ -44,6 +45,7 @@
 %% node_status:trigger(yaws_up).
 %%   up = node_status:get().
 %%
+start_link() -> start_link(jcfg:val(node_status_expectations)).
 start_link(Expectations) ->
     start_link(Expectations, ?MODULE).
 start_link(Expectations, Name) when is_list(Expectations), is_atom(Name) ->
