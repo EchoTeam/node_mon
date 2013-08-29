@@ -1,11 +1,15 @@
 {application, node_mon,
  [
   {description, "Node monitoring services"},
-  {vsn, "1.0.2"},
+  {vsn, "1.0.3"},
   {registered, []},
+  {mod, {node_mon_app,[]}},
   {applications, [
                   kernel,
                   stdlib
                  ]},
-  {env, []}
+  {env, [
+    {start_expectations, [application_loaded, node_ready]}
+  ]}
  ]}.
+
