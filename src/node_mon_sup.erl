@@ -1,3 +1,7 @@
+%%% 
+%%% Copyright (c) 2008-2014 JackNyfe, Inc. <info@jacknyfe.com>
+%%% All rights reserved.
+%%%
 -module(node_mon_sup).
 
 -behaviour(supervisor).

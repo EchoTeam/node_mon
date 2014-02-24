@@ -1,3 +1,7 @@
+%%% 
+%%% Copyright (c) 2008-2014 JackNyfe, Inc. <info@jacknyfe.com>
+%%% All rights reserved.
+%%%
 %%% vim: set ts=4 sts=4 sw=4 et:
 
 -module(node_mon).
